@@ -237,7 +237,7 @@
             </div>
 
             <!-- Offers Grid -->
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="flex overflow-x-auto gap-6 pb-6 snap-x hide-scroll">
                 <div class="service-card bg-white rounded-2xl border border-gray-100 overflow-hidden reveal-element shadow-sm hover:shadow-md transition-shadow" *ngFor="let offer of offers">
                     <div class="relative h-48 w-full bg-hit-cream">
                         <img *ngIf="offer.image" [src]="offer.image" [alt]="offer.title" class="w-full h-full object-cover">
@@ -282,7 +282,7 @@
             </div>
 
             <!-- Services Grid -->
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="flex overflow-x-auto gap-6 pb-6 snap-x hide-scroll">
                 <!-- Service 1 -->
                 <div class="service-card bg-white rounded-2xl p-8 border border-gray-100 reveal-element">
                     <div class="icon-wrap w-14 h-14 bg-hit-cream rounded-xl flex items-center justify-center mb-5">

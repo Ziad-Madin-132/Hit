@@ -121,3 +121,27 @@
         rgba(244, 121, 32, 0.03) 21px
     );
 }
+
+/* Horizontal scrolling for services & offers */
+.hide-scroll {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+.hide-scroll::-webkit-scrollbar {
+    display: none;
+}
+.hide-scroll > .service-card {
+    flex-shrink: 0;
+    scroll-snap-align: start;
+    width: 85%;
+}
+@media (min-width: 768px) {
+    .hide-scroll > .service-card {
+        width: calc(50% - 12px);
+    }
+}
+@media (min-width: 1024px) {
+    .hide-scroll > .service-card {
+        width: calc(33.333% - 16px);
+    }
+}

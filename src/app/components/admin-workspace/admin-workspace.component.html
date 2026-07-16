@@ -79,7 +79,7 @@
 
         <div class="dc au d6">
           <div class="dc-head"><h3 class="dc-title">آخر العملاء</h3></div>
-          <table class="dt">
+          <div class="table-responsive"><table class="dt">
             <thead><tr><th>الهاتف</th><th>الخدمة</th><th>التاريخ</th><th>الحالة</th></tr></thead>
             <tbody>
               <tr *ngIf="!recentCustomers.length"><td colspan="4" style="text-align:center;color:var(--db-dim);">لا يوجد عملاء بعد</td></tr>
@@ -90,7 +90,7 @@
                 <td><span class="bdg bdg-on">الخصم المتاح: {{ c.availableDiscount }}%</span></td>
               </tr>
             </tbody>
-          </table>
+          </table></div>
         </div>
         <div class="dc au d6">
           <div class="dc-head"><h3 class="dc-title">تقارير النظام (PDF)</h3></div>
@@ -103,7 +103,7 @@
 
         <div class="dc au d6">
           <div class="dc-head"><h3 class="dc-title">خصومات اليوم</h3></div>
-          <table class="dt">
+          <div class="table-responsive"><table class="dt">
             <thead><tr><th>الهاتف</th><th>الخدمة</th><th>الخصم</th><th>السعر النهائي</th><th>الوقت</th></tr></thead>
             <tbody>
               <tr *ngIf="!todaysDiscounts.length"><td colspan="5" style="text-align:center;color:var(--db-dim);">لا توجد خصومات اليوم</td></tr>
@@ -115,7 +115,7 @@
                 <td dir="ltr" style="text-align:right;">{{ t.date | date:'shortTime' }}</td>
               </tr>
             </tbody>
-          </table>
+          </table></div>
         </div>
       </section>
 
@@ -126,7 +126,7 @@
             <h3 class="dc-title">إدارة الخدمات</h3>
             <button class="btn bpa bsm" type="button" (click)="openSvcMo()"><i class="fas fa-plus"></i>إضافة خدمة</button>
           </div>
-          <table class="dt">
+          <div class="table-responsive"><table class="dt">
             <thead><tr><th>الخدمة</th><th>الوصف</th><th>السعر</th><th>الحالة</th><th>إجراءات</th></tr></thead>
             <tbody>
               <tr *ngIf="!services.length"><td colspan="5" style="text-align:center;color:var(--db-dim);">لا توجد خدمات</td></tr>
@@ -141,7 +141,7 @@
                 </td>
               </tr>
             </tbody>
-          </table>
+          </table></div>
         </div>
       </section>
 
@@ -152,7 +152,7 @@
             <h3 class="dc-title">إدارة العروض</h3>
             <button class="btn bwa bsm" type="button" (click)="openOffMo()"><i class="fas fa-plus"></i>إضافة عرض</button>
           </div>
-          <table class="dt">
+          <div class="table-responsive"><table class="dt">
             <thead><tr><th>الصورة</th><th>العنوان</th><th>الوصف</th><th>من</th><th>إلى</th><th>إجراءات</th></tr></thead>
             <tbody>
               <tr *ngIf="!offers.length"><td colspan="6" style="text-align:center;color:var(--db-dim);">لا توجد عروض</td></tr>
@@ -171,7 +171,7 @@
                 </td>
               </tr>
             </tbody>
-          </table>
+          </table></div>
         </div>
       </section>
 
@@ -305,7 +305,7 @@
               <button class="btn bwa bsm" type="button" (click)="openAddCliMo()"><i class="fas fa-plus"></i>إضافة عميل</button>
             </div>
           </div>
-          <table class="dt">
+          <div class="table-responsive"><table class="dt">
             <thead><tr><th>الهاتف</th><th>تاريخ التسجيل</th><th>عدد الزيارات</th><th>الخصم المتاح</th><th>غسلات مجانية</th><th>رابط الدعوة</th><th>إجراءات</th></tr></thead>
             <tbody>
               <tr *ngIf="!filteredCustomers.length"><td colspan="7" style="text-align:center;color:var(--db-dim);">لا يوجد عملاء</td></tr>
@@ -327,7 +327,7 @@
                 </td>
               </tr>
             </tbody>
-          </table>
+          </table></div>
         </div>
       </section>
 

@@ -512,3 +512,13 @@ body { font-family: 'Tajawal', sans-serif; }
   .sg { grid-template-columns: 1fr 1fr; }
   .sb-wrap > .fi-db { width: 140px; }
 }
+
+/* Responsive Tables */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.table-responsive .dt {
+  white-space: nowrap;
+}
