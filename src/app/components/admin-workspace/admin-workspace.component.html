@@ -1,0 +1,599 @@
+<div class="tc" id="toastBox">
+  <div class="tt" *ngFor="let t of toasts" [class]="'tt ' + t.type">
+    <i class="fas" [class]="t.type === 'ok' ? 'fa-check-circle' : t.type === 'er' ? 'fa-times-circle' : t.type === 'wn' ? 'fa-exclamation-triangle' : 'fa-info-circle'" style="font-size:15px;flex-shrink:0;"></i>
+    <span>{{ t.msg }}</span>
+  </div>
+</div>
+
+<div class="dashboard" id="dashboard">
+  <div class="sb-ov" [class.on]="sidebarOpen" (click)="closeSB()"></div>
+  <aside class="sidebar" [class.open]="sidebarOpen">
+    <div class="sb-head">
+      <div class="sb-logos">
+        <img src="https://z-cdn-media.chatglm.cn/files/610afc0d-b4a1-4ed4-a444-def76f07fbab.png?auth_key=1882730238-64655800285b41fca69b249d280cb946-0-4b9dce053bcaf3ffba9393a2e7633074" alt="PETRO HIT">
+        <img src="https://z-cdn-media.chatglm.cn/files/896a3356-50d0-4aec-88c0-4d6b5a20954d.png?auth_key=1882730238-897e0546bca64033a4d49fb2469985f6-0-e5dc655143dafd0afe4b985bef1091cb" alt="بترو هيت">
+      </div>
+      <div class="sb-role">مدير النظام</div>
+    </div>
+    <nav class="sb-nav">
+      <button class="ni" *ngIf="role === 'ADMIN'" [class.active]="activeSection === 'home'" (click)="go('home')"><i class="fas fa-home"></i>الرئيسية</button>
+      <button class="ni" *ngIf="role === 'ADMIN'" [class.active]="activeSection === 'services'" (click)="go('services')"><i class="fas fa-tags"></i>الخدمات</button>
+      <button class="ni" *ngIf="role === 'ADMIN'" [class.active]="activeSection === 'offers'" (click)="go('offers')"><i class="fas fa-gift"></i>العروض</button>
+      <button class="ni" [class.active]="activeSection === 'addClient'" (click)="go('addClient')"><i class="fas fa-user-plus"></i>إضافة عميل</button>
+      <button class="ni" [class.active]="activeSection === 'clients'" (click)="go('clients')"><i class="fas fa-users"></i>العملاء</button>
+      <button class="ni" *ngIf="role === 'ADMIN'" [class.active]="activeSection === 'invitations'" (click)="go('invitations')"><i class="fas fa-envelope-open-text"></i>الدعوات</button>
+      <button class="ni" *ngIf="role === 'ADMIN'" [class.active]="activeSection === 'settings'" (click)="go('settings')"><i class="fas fa-cog"></i>الإعدادات</button>
+    </nav>
+    <div class="sb-foot">
+      <button class="btn-lo" type="button" (click)="refreshAll()"><i class="fas fa-redo"></i><span class="hide-m">تحديث الصفحة</span></button>
+      <button class="btn-lo" type="button" (click)="logoutRequested.emit()" style="margin-top: 10px; color: #dc3545; background-color: #f8d7da; border-radius: 8px;"><i class="fas fa-sign-out-alt"></i><span class="hide-m">تسجيل الخروج</span></button>
+    </div>
+  </aside>
+  <div class="mc">
+    <header class="topbar">
+      <div class="tb-right">
+        <button class="menu-btn" type="button" (click)="togSB()"><i class="fas fa-bars"></i></button>
+        <h1 class="tb-title">{{ activeSection === 'home' ? 'الرئيسية' : activeSection === 'services' ? 'إدارة الخدمات' : activeSection === 'offers' ? 'إدارة العروض' : activeSection === 'addClient' ? 'إضافة عميل' : activeSection === 'clients' ? 'العملاء' : 'الإعدادات' }}</h1>
+      </div>
+      <div class="tb-left"><span style="font-size:12px;color:var(--db-dim);">{{ currentTime }}</span></div>
+    </header>
+    <div class="pc">
+
+      <!-- ==================== HOME ==================== -->
+      <section class="ps" *ngIf="activeSection === 'home'">
+        <div class="sg">
+          <div class="sc-card au d1"><div class="sc-icon"><i class="fas fa-tags"></i></div><div class="sc-num">{{ stats.services }}</div><div class="sc-lbl">الخدمات</div></div>
+          <div class="sc-card au d2"><div class="sc-icon"><i class="fas fa-gift"></i></div><div class="sc-num">{{ stats.offers }}</div><div class="sc-lbl">العروض</div></div>
+          <div class="sc-card au d3"><div class="sc-icon"><i class="fas fa-users"></i></div><div class="sc-num">{{ stats.clients }}</div><div class="sc-lbl">العملاء</div></div>
+          <div class="sc-card au d4"><div class="sc-icon"><i class="fas fa-money-bill-wave"></i></div><div class="sc-num">{{ stats.dailyRevenue }}</div><div class="sc-lbl">إيرادات اليوم</div></div>
+          <div class="sc-card au d5"><div class="sc-icon"><i class="fas fa-money-bill"></i></div><div class="sc-num">{{ stats.yesterdayRevenue }}</div><div class="sc-lbl">إيرادات أمس</div></div>
+          <div class="sc-card au d6"><div class="sc-icon"><i class="fas fa-chart-line"></i></div><div class="sc-num">{{ stats.monthlyRevenue }}</div><div class="sc-lbl">إيرادات الشهر</div></div>
+        </div>
+
+        <div class="dc au d5">
+          <div class="dc-head"><h3 class="dc-title">خدماتنا <span style="font-size:12px;color:var(--db-dim);font-weight:500;">{{ visibleServices.length }} خدمة</span></h3></div>
+          <div style="padding:20px;">
+            <div class="svc-preview-grid" *ngIf="visibleServices.length; else noVisSvc">
+              <div class="svc-preview-card" *ngFor="let s of visibleServices">
+                <div class="spc-top"><div class="spc-icon"><i class="fas" [class]="getSvcIcon(s.name)"></i></div><div class="spc-name">{{ s.name }}</div></div>
+                <div class="spc-desc">{{ s.desc }}</div>
+                <div class="spc-price">{{ s.price }} <small>ر.س</small></div>
+              </div>
+            </div>
+            <ng-template #noVisSvc><div class="empty"><i class="fas fa-tags"></i><p>لا توجد خدمات ظاهرة</p></div></ng-template>
+          </div>
+        </div>
+
+        <div class="dc au d6">
+          <div class="dc-head"><h3 class="dc-title">أوقات العمل</h3></div>
+          <div style="padding:20px;">
+            <div class="hours-grid" *ngIf="settings.hours.length; else noHours">
+              <div class="hour-item" *ngFor="let h of settings.hours">
+                <span class="hour-day">{{ h.day }}</span>
+                <span class="hour-time" dir="ltr">{{ h.from }} - {{ h.to }}</span>
+              </div>
+            </div>
+            <ng-template #noHours><p style="color:var(--db-dim);font-size:12px;">لم يتم تحديد أوقات العمل</p></ng-template>
+          </div>
+        </div>
+
+        <div class="dc au d6">
+          <div class="dc-head"><h3 class="dc-title">آخر العملاء</h3></div>
+          <table class="dt">
+            <thead><tr><th>الهاتف</th><th>الخدمة</th><th>التاريخ</th><th>الحالة</th></tr></thead>
+            <tbody>
+              <tr *ngIf="!recentCustomers.length"><td colspan="4" style="text-align:center;color:var(--db-dim);">لا يوجد عملاء بعد</td></tr>
+              <tr *ngFor="let c of recentCustomers">
+                <td dir="ltr" style="text-align:right;">{{ c.phoneNumber }}</td>
+                <td><span class="bdg bdg-wash">تمت الزيارة</span></td>
+                <td>{{ c.createdAt | date }}</td>
+                <td><span class="bdg bdg-on">الخصم المتاح: {{ c.availableDiscount }}%</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="dc au d6">
+          <div class="dc-head"><h3 class="dc-title">تقارير النظام (PDF)</h3></div>
+          <div style="padding:20px; display:flex; gap:10px; flex-wrap:wrap;">
+            <button class="btn bpa" type="button" (click)="downloadReport('daily')"><i class="fas fa-file-pdf"></i> تقرير يومي</button>
+            <button class="btn bwa" type="button" (click)="downloadReport('weekly')"><i class="fas fa-file-pdf"></i> تقرير أسبوعي</button>
+            <button class="btn bga" type="button" (click)="downloadReport('monthly')"><i class="fas fa-file-pdf"></i> تقرير شهري</button>
+          </div>
+        </div>
+
+        <div class="dc au d6">
+          <div class="dc-head"><h3 class="dc-title">خصومات اليوم</h3></div>
+          <table class="dt">
+            <thead><tr><th>الهاتف</th><th>الخدمة</th><th>الخصم</th><th>السعر النهائي</th><th>الوقت</th></tr></thead>
+            <tbody>
+              <tr *ngIf="!todaysDiscounts.length"><td colspan="5" style="text-align:center;color:var(--db-dim);">لا توجد خصومات اليوم</td></tr>
+              <tr *ngFor="let t of todaysDiscounts">
+                <td dir="ltr" style="text-align:right;">{{ t.customerPhone }}</td>
+                <td>{{ t.service?.name || 'غير محدد' }}</td>
+                <td><span class="bdg bdg-on">{{ t.discountApplied }}%</span></td>
+                <td>{{ t.finalPrice }} ر.س</td>
+                <td dir="ltr" style="text-align:right;">{{ t.date | date:'shortTime' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ==================== SERVICES ==================== -->
+      <section class="ps" *ngIf="activeSection === 'services'">
+        <div class="dc">
+          <div class="dc-head">
+            <h3 class="dc-title">إدارة الخدمات</h3>
+            <button class="btn bpa bsm" type="button" (click)="openSvcMo()"><i class="fas fa-plus"></i>إضافة خدمة</button>
+          </div>
+          <table class="dt">
+            <thead><tr><th>الخدمة</th><th>الوصف</th><th>السعر</th><th>الحالة</th><th>إجراءات</th></tr></thead>
+            <tbody>
+              <tr *ngIf="!services.length"><td colspan="5" style="text-align:center;color:var(--db-dim);">لا توجد خدمات</td></tr>
+              <tr *ngFor="let s of services">
+                <td>{{ s.name }}</td>
+                <td style="max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--db-muted);font-size:11px;">{{ s.desc }}</td>
+                <td>{{ s.price }} ر.س</td>
+                <td><span class="bdg" [class.bdg-on]="s.visible" [class.bdg-off]="!s.visible">{{ s.visible ? 'ظاهر' : 'مخفي' }}</span></td>
+                <td>
+                  <button class="btn bpa bsm" type="button" (click)="editSvc(s.id)" style="padding:5px 10px;margin-left:6px;"><i class="fas fa-edit"></i></button>
+                  <button class="btn bda bsm" type="button" (click)="confirmDel(s.id, 'service')" style="padding:5px 10px;"><i class="fas fa-trash"></i></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ==================== OFFERS ==================== -->
+      <section class="ps" *ngIf="activeSection === 'offers'">
+        <div class="dc">
+          <div class="dc-head">
+            <h3 class="dc-title">إدارة العروض</h3>
+            <button class="btn bwa bsm" type="button" (click)="openOffMo()"><i class="fas fa-plus"></i>إضافة عرض</button>
+          </div>
+          <table class="dt">
+            <thead><tr><th>الصورة</th><th>العنوان</th><th>الوصف</th><th>من</th><th>إلى</th><th>إجراءات</th></tr></thead>
+            <tbody>
+              <tr *ngIf="!offers.length"><td colspan="6" style="text-align:center;color:var(--db-dim);">لا توجد عروض</td></tr>
+              <tr *ngFor="let o of offers">
+                <td>
+                  <img *ngIf="o.image; else noImg" [src]="o.image" class="oi" alt="">
+                  <ng-template #noImg><span style="color:var(--db-dim);font-size:11px;">بدون صورة</span></ng-template>
+                </td>
+                <td>{{ o.title }}</td>
+                <td style="max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ o.desc }}</td>
+                <td dir="ltr" style="text-align:right;font-size:11px;">{{ o.startDate }}</td>
+                <td dir="ltr" style="text-align:right;font-size:11px;">{{ o.endDate }}</td>
+                <td>
+                  <button class="btn bwa bsm" type="button" (click)="editOff(o.id)" style="padding:5px 10px;margin-left:6px;"><i class="fas fa-edit"></i></button>
+                  <button class="btn bda bsm" type="button" (click)="confirmDel(o.id, 'offer')" style="padding:5px 10px;"><i class="fas fa-trash"></i></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ==================== ADD CLIENT ==================== -->
+      <section class="ps" *ngIf="activeSection === 'addClient'">
+        <div class="client-form-wrap au">
+          <div class="client-form-card">
+            <div class="client-form-header">
+              <div class="cf-icon"><i class="fas fa-user-plus"></i></div>
+              <h3>إضافة عميل جديد</h3>
+              <p>أدخل رقم الهاتف ثم اضغط على الخدمة المطلوبة</p>
+            </div>
+            <div class="client-form-body">
+              <div class="cf-group">
+                <label>رقم الهاتف</label>
+                <div class="cf-input-wrap"><i class="fas fa-phone-alt"></i><input type="tel" class="fi-db" id="cPhone" placeholder="مثال: 01012345678" dir="ltr" style="text-align:right;" (input)="onPhoneInput()"></div>
+              </div>
+              <div class="cf-group">
+                <label>اضغط على الخدمة المطلوبة</label>
+                <div class="svc-cards" id="svcPickArea">
+                  <div *ngIf="!visibleServices.length" style="color:var(--db-dim);font-size:12px;grid-column:1/-1;text-align:center;padding:20px;">لا توجد خدمات متاحة</div>
+                  <div class="svc-pick" *ngFor="let s of visibleServices" [id]="'svc-' + s.id" (click)="doPick(s)">
+                    <div class="sp-check"><i class="fas fa-check"></i></div>
+                    <span class="sp-icon"><i class="fas" [class]="getSvcIcon(s.name)"></i></span>
+                    <div class="sp-name">{{ s.name }}</div>
+                    <div class="sp-desc">{{ s.desc }}</div>
+                    <span class="sp-price">{{ s.price }} ر.س</span>
+                  </div>
+                </div>
+              </div>
+              <div class="selected-summary" id="selectedSummary" [class.show]="pickedSvcId != null">
+                <div class="ss-icon" id="ssIcon"><i class="fas fa-check"></i></div>
+                <div class="ss-info"><div class="ss-name" id="ssName">{{ selectedServiceName }}</div><div class="ss-desc" id="ssDesc">{{ selectedServiceDesc }}</div></div>
+                <div class="ss-price" id="ssPrice">{{ selectedServicePrice }}</div>
+                <button class="ss-remove" type="button" (click)="clearPick()" title="إلغاء"><i class="fas fa-times"></i></button>
+              </div>
+
+              <!-- Large Car Toggle Section -->
+              <div class="cf-group" style="margin-top: 15px; padding: 15px; background: #fff4e5; border-radius: 8px; border: 1px solid #ffd8a8; display:flex; align-items:center; gap:12px;">
+                <label class="tg">
+                  <input type="checkbox" [(ngModel)]="isLargeCar" (change)="onLargeCarToggle()">
+                  <span class="tg-s"></span>
+                </label>
+                <div>
+                  <span style="font-weight: 600; display: block; color: var(--p);"><i class="fas fa-truck-pickup"></i> سيارة كبيرة</span>
+                  <span style="font-size: 11px; color: var(--db-muted);">سيتم إضافة رسوم السيارة الكبيرة الخاصة بهذه الخدمة إلى السعر.</span>
+                </div>
+              </div>
+
+              <!-- Discount Controls Section -->
+              <div class="cf-group" style="margin-top: 15px; padding: 15px; background: #f9f9f9; border-radius: 8px; border: 1px solid #eee;">
+                <h4 style="margin-top: 0; margin-bottom: 10px; font-size: 14px; color: var(--p);"><i class="fas fa-tags"></i> خيارات الخصم</h4>
+                
+                <!-- Free Wash Toggle -->
+                <div style="display:flex; align-items:center; gap:12px; margin-bottom: 15px; background: #e8f5e9; padding: 10px; border-radius: 8px; border: 1px solid #c8e6c9;" *ngIf="customerFreeWashes > 0">
+                  <label class="tg">
+                    <input type="checkbox" [(ngModel)]="useFreeWash">
+                    <span class="tg-s"></span>
+                  </label>
+                  <div>
+                    <span style="font-weight: 600; display: block; color: #2e7d32;">استخدام الغسلة المجانية (Finish)</span>
+                    <span style="font-size: 11px; color: #388e3c;">العميل لديه {{customerFreeWashes}} غسلة مجانية، تفعيل هذا الخيار سيجعل التكلفة 0 وسيخصم غسلة من رصيده.</span>
+                  </div>
+                </div>
+
+                <!-- Referral Discount Toggle (Only if available) -->
+                <div style="display:flex; align-items:center; gap:12px; margin-bottom: 15px;" *ngIf="customerAvailableDiscount > 0">
+                  <label class="tg">
+                    <input type="checkbox" [(ngModel)]="useRefDiscount">
+                    <span class="tg-s"></span>
+                  </label>
+                  <div>
+                    <span style="font-weight: 600; display: block;">استخدام رصيد العميل ({{ customerAvailableDiscount }}%)</span>
+                    <span style="font-size: 11px; color: var(--db-muted);">سيتم استهلاك رصيد دعوات الأصدقاء المتوفر لدى العميل.</span>
+                  </div>
+                </div>
+                <div *ngIf="customerAvailableDiscount === 0" style="margin-bottom: 15px; font-size: 12px; color: var(--db-dim);">
+                  <i class="fas fa-info-circle"></i> لا يوجد رصيد خصم متاح لهذا العميل.
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                  <!-- Manual Discount -->
+                  <div>
+                    <label style="font-size: 12px;">خصم يدوي (%)</label>
+                    <input type="number" class="fi-db" [(ngModel)]="manualDiscountPct" placeholder="0" min="0" max="100" dir="ltr" style="padding: 8px; font-size: 14px;">
+                  </div>
+
+                  <!-- Offer Selection -->
+                  <div>
+                    <label style="font-size: 12px;">تطبيق عرض</label>
+                    <select class="fi-db" [(ngModel)]="selectedOfferId" style="padding: 8px; font-size: 14px;">
+                      <option [ngValue]="null">بدون عرض</option>
+                      <option *ngFor="let o of offers" [ngValue]="o.id">
+                        {{ o.title }} ({{ o.discountPct }}%)
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="cf-group" style="margin-top: 15px;">
+                <label class="tg">
+                  <input type="checkbox" [(ngModel)]="legalConsent">
+                  <span class="tg-s"></span>
+                </label>
+                <span style="font-size: 13px; margin-right: 10px; color: var(--db-muted);">
+                  أوافق على تلقي رسائل العروض، وأتحمل المسؤولية القانونية في حال رفع العميل بلاغ إزعاج أو حظر
+                </span>
+              </div>
+              <button class="btn bp bf cf-submit" type="button" (click)="addCli()" [disabled]="waBusy || !legalConsent">
+                <span *ngIf="!waBusy"><i class="fas fa-paper-plane"></i><span>إضافة العميل وإرسال رسالة واتساب (أبشر)</span></span>
+                <span *ngIf="waBusy"><i class="fas fa-spinner fa-spin"></i><span>جاري الإرسال...</span></span>
+              </button>
+              <p class="error" style="text-align:center;margin-top:8px;" *ngIf="waError">{{ waError }}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== CLIENTS ==================== -->
+      <section class="ps" *ngIf="activeSection === 'clients'">
+        <div class="dc">
+          <div class="dc-head" style="flex-wrap: wrap; gap: 15px;">
+            <h3 class="dc-title">العملاء</h3>
+            <div style="display: flex; gap: 10px; flex: 1;" *ngIf="role === 'ADMIN'">
+              <button class="btn" [class.bpa]="clientTab === 'all'" [class.bgh]="clientTab !== 'all'" (click)="clientTab = 'all'" style="padding: 6px 12px; font-size: 13px;">جميع العملاء</button>
+              <button class="btn" [class.bpa]="clientTab === 'today'" [class.bgh]="clientTab !== 'today'" (click)="clientTab = 'today'" style="padding: 6px 12px; font-size: 13px;">عملاء اليوم</button>
+            </div>
+            <div style="display: flex; gap: 10px; align-items: center;">
+              <div class="sb-wrap" style="margin: 0;"><i class="fas fa-search"></i><input type="tel" class="fi-db" id="cliSearch" placeholder="بحث برقم الهاتف..." [(ngModel)]="cliSearch" dir="ltr"></div>
+              <button class="btn bwa bsm" type="button" (click)="openAddCliMo()"><i class="fas fa-plus"></i>إضافة عميل</button>
+            </div>
+          </div>
+          <table class="dt">
+            <thead><tr><th>الهاتف</th><th>تاريخ التسجيل</th><th>عدد الزيارات</th><th>الخصم المتاح</th><th>غسلات مجانية</th><th>رابط الدعوة</th><th>إجراءات</th></tr></thead>
+            <tbody>
+              <tr *ngIf="!filteredCustomers.length"><td colspan="7" style="text-align:center;color:var(--db-dim);">لا يوجد عملاء</td></tr>
+              <tr *ngFor="let c of filteredCustomers">
+                <td dir="ltr" style="text-align:right;">{{ c.phoneNumber }}</td>
+                <td>{{ c.createdAt | date }}</td>
+                <td><span class="bdg bdg-wash" style="background:#8b5cf6; color:white;">{{ c.visitCount || 0 }}</span></td>
+                <td><span class="bdg bdg-on">{{ c.availableDiscount }}%</span></td>
+                <td><span class="bdg bdg-wash">{{ c.freeWashes }}</span></td>
+                <td>
+                  <button class="btn bwa bsm" type="button" (click)="copyInviteLink(c.inviteToken)" style="padding:4px 8px;font-size:11px;">
+                    <i class="fas fa-copy"></i> نسخ الرابط
+                  </button>
+                </td>
+                <td>
+                  <button class="btn bga bsm" type="button" (click)="viewCustomerHistory(c.phoneNumber)" style="padding:5px 10px;margin-left:6px;" title="عرض السجل"><i class="fas fa-history"></i></button>
+                  <button class="btn bpa bsm" type="button" (click)="editCli(c.phoneNumber)" style="padding:5px 10px;margin-left:6px;"><i class="fas fa-edit"></i></button>
+                  <button class="btn bda bsm" type="button" (click)="confirmDel(c.phoneNumber, 'client')" style="padding:5px 10px;"><i class="fas fa-trash"></i></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ==================== SETTINGS ==================== -->
+      <section class="ps" *ngIf="activeSection === 'settings'">
+        <div class="ss">
+          <div class="ss-title"><i class="fas fa-palette"></i>ألوان الموقع</div>
+          <div class="cg">
+            <div class="cf"><label>اللون الأساسي</label><input type="color" id="cP" [(ngModel)]="cP" (ngModelChange)="applyColors()"></div>
+            <div class="cf"><label>لون التمييز</label><input type="color" id="cA" [(ngModel)]="cA" (ngModelChange)="applyColors()"></div>
+            <div class="cf"><label>الذهبي</label><input type="color" id="cG" [(ngModel)]="cG" (ngModelChange)="applyColors()"></div>
+            <div class="cf"><label>خلفية الموقع</label><input type="color" id="cBg" [(ngModel)]="cBg" (ngModelChange)="applyColors()"></div>
+          </div>
+        </div>
+        <div class="ss">
+          <div class="ss-title"><i class="fas fa-cog"></i>إعدادات إضافية</div>
+          <div class="fg"><label>رسوم السيارة الكبيرة (ر.س)</label><input type="number" class="fi-db" id="sLargeCarFee" [(ngModel)]="sLargeCarFee"></div>
+        </div>
+        <div class="ss">
+          <div class="ss-title"><i class="fas fa-font"></i>النصوص</div>
+          <div class="fg"><label>اسم المركز</label><input type="text" class="fi-db" id="sName" [(ngModel)]="sName"></div>
+          <div class="fg"><label>العنوان الرئيسي</label><input type="text" class="fi-db" id="sHero" [(ngModel)]="sHero"></div>
+          <div class="fg"><label>الوصف</label><textarea class="fi-db" id="sDesc" rows="3" [(ngModel)]="sDesc" style="resize:vertical;"></textarea></div>
+        </div>
+        <div class="ss">
+          <div class="ss-title"><i class="fas fa-phone-alt"></i>معلومات التواصل</div>
+          <div class="fg"><label>رقم الهاتف</label><input type="tel" class="fi-db" id="sPhone" [(ngModel)]="sPhone" dir="ltr"></div>
+          <div class="fg"><label>رقم الواتساب</label><input type="tel" class="fi-db" id="sWA" [(ngModel)]="sWA" dir="ltr"></div>
+          <div class="fg"><label>العنوان</label><input type="text" class="fi-db" id="sAddr" [(ngModel)]="sAddr"></div>
+        </div>
+        <div class="ss">
+          <div class="ss-title"><i class="fas fa-info-circle"></i>إعدادات صفحة عن المغسلة</div>
+          <div class="fg"><label>صورة القسم (رابط)</label><input type="text" class="fi-db" [(ngModel)]="sAboutImage" placeholder="https://..."></div>
+          <div class="fg"><label>عنوان القسم</label><input type="text" class="fi-db" [(ngModel)]="sAboutTitle" placeholder="مثال: عن مؤسسة هيت"></div>
+          <div class="fg"><label>النص الأول</label><textarea class="fi-db" rows="3" [(ngModel)]="sAboutText1" style="resize:vertical;"></textarea></div>
+          <div class="fg"><label>النص الثاني</label><textarea class="fi-db" rows="3" [(ngModel)]="sAboutText2" style="resize:vertical;"></textarea></div>
+          <div class="fg"><label>رابط خريطة الموقع (Iframe Src)</label><input type="text" class="fi-db" [(ngModel)]="sMapUrl" dir="ltr" placeholder="https://www.google.com/maps/embed?..."></div>
+          
+          <div class="fg">
+            <label>شعارات شركاء النجاح (رابط الصورة)</label>
+            <div style="display:flex;gap:10px;margin-bottom:10px;">
+              <input type="text" class="fi-db" [(ngModel)]="newBrandUrl" dir="ltr" placeholder="https://...">
+              <button class="btn bwa" type="button" (click)="addBrand()"><i class="fas fa-plus"></i></button>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:10px;background:#f9f9f9;padding:10px;border-radius:8px;">
+              <div *ngIf="!sBrands.length" style="color:var(--text-muted);font-size:12px;">لا يوجد شعارات</div>
+              <div *ngFor="let brand of sBrands; let i = index" style="position:relative;background:#fff;border:1px solid #ddd;padding:5px;border-radius:4px;">
+                <img [src]="brand" style="max-height:40px;max-width:100px;object-fit:contain;display:block;">
+                <button type="button" (click)="removeBrand(i)" style="position:absolute;top:-8px;right:-8px;background:red;color:white;border:none;border-radius:50%;width:20px;height:20px;font-size:10px;cursor:pointer;"><i class="fas fa-times"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ss">
+          <div class="ss-title"><i class="fas fa-clock"></i>أوقات العمل</div>
+          <div id="hoursEditArea"></div>
+        </div>
+        <div class="ss">
+          <div class="ss-title"><i class="fab fa-whatsapp"></i>قوالب رسائل واتساب</div>
+          <p style="font-size:12px;color:var(--text-muted);margin-bottom:16px;">يمكنك تعديل الرسائل المرسلة تلقائياً عند إضافة عميل</p>
+          <div class="fg"><label>رسالة الترحيب</label><textarea class="fi-db" [(ngModel)]="waTemplateWelcome" rows="2" style="resize:vertical;"></textarea></div>
+          <div class="fg"><label>رسالة تغيير الزيت</label><textarea class="fi-db" [(ngModel)]="waTemplateOil" rows="2" style="resize:vertical;"></textarea></div>
+          <div class="fg"><label>رسالة الغسيل</label><textarea class="fi-db" [(ngModel)]="waTemplateWash" rows="2" style="resize:vertical;"></textarea></div>
+        </div>
+        <div class="ss" *ngIf="role === 'ADMIN'">
+          <div class="ss-title"><i class="fas fa-lock"></i>الأمان وإدارة الحسابات 🔒</div>
+          
+          <div class="fg">
+            <label>تحديث بيانات الأدمن</label>
+            <input type="text" class="fi-db" placeholder="اسم المستخدم للأدمن (جديد أو الحالي)" [(ngModel)]="adminUsername" dir="ltr" style="margin-bottom: 8px;">
+            <input type="password" class="fi-db" placeholder="كلمة المرور الحالية (مطلوبة)" [(ngModel)]="adminOldPass" style="margin-bottom: 8px;">
+            <input type="password" class="fi-db" placeholder="كلمة المرور الجديدة" [(ngModel)]="adminNewPass" style="margin-bottom: 8px;">
+            <button class="btn bpa bsm" type="button" (click)="updateAdminPassword()">تحديث بيانات الأدمن</button>
+          </div>
+          <hr style="border-top:1px solid #ddd; margin:15px 0;">
+          <div class="fg">
+            <label>تحديث بيانات الكاشير</label>
+            <input type="text" class="fi-db" placeholder="اسم المستخدم للكاشير" [(ngModel)]="cashierUsername" dir="ltr" style="margin-bottom: 8px;">
+            <input type="password" class="fi-db" placeholder="كلمة المرور الجديدة للكاشير" [(ngModel)]="cashierNewPass" style="margin-bottom: 8px;">
+            <button class="btn bpa bsm" type="button" (click)="resetCashierPassword()">تحديث بيانات الكاشير</button>
+          </div>
+        </div>
+
+        <div class="ss" *ngIf="role === 'ADMIN'">
+          <div class="ss-title"><i class="fas fa-file-pdf"></i>تقارير PDF</div>
+          <p style="font-size:12px;color:var(--text-muted);margin-bottom:16px;">استخراج تقارير شاملة للإيرادات والخصومات المستهلكة</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <button class="btn bp" (click)="downloadReport('DAILY')"><i class="fas fa-download"></i> تقرير يومي</button>
+            <button class="btn bp" (click)="downloadReport('WEEKLY')"><i class="fas fa-download"></i> تقرير أسبوعي</button>
+            <button class="btn bp" (click)="downloadReport('MONTHLY')"><i class="fas fa-download"></i> تقرير شهري</button>
+            <button class="btn bp" (click)="downloadReport('YEARLY')"><i class="fas fa-download"></i> تقرير سنوي</button>
+          </div>
+        </div>
+
+        <button class="btn bp" type="button" (click)="saveSet()" style="padding:13px 28px;"><i class="fas fa-save"></i>حفظ الإعدادات</button>
+      </section>
+
+      <!-- ==================== INVITATIONS ==================== -->
+      <section class="ps" *ngIf="activeSection === 'invitations'">
+        <div class="dc">
+          <div class="dc-head">
+            <h3 class="dc-title">دعوات الأصدقاء</h3>
+          </div>
+          <table class="dt">
+            <thead><tr><th>رقم العميل (الداعي)</th><th>عدد الأصدقاء المدعوين</th><th>أرقام الأصدقاء</th></tr></thead>
+            <tbody>
+              <tr *ngIf="!invitationsList.length"><td colspan="3" style="text-align:center;color:var(--db-dim);">لا يوجد دعوات حتى الآن</td></tr>
+              <tr *ngFor="let item of invitationsList">
+                <td dir="ltr" style="text-align:right; font-weight:bold;">{{ item.inviterPhone }}</td>
+                <td><span class="bdg bdg-on">{{ item.count }} أصدقاء</span></td>
+                <td dir="ltr" style="text-align:right;">
+                  <span *ngFor="let phone of item.invitedPhones; let isLast = last">
+                    {{ phone }}{{ isLast ? '' : ', ' }}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div class="mo" id="svcMo"><div class="mo-box"><div class="mo-head"><h3 class="mo-title" id="svcMoT">إضافة خدمة</h3><button class="mo-x" type="button" (click)="clMo('svcMo')"><i class="fas fa-times"></i></button></div><div class="mo-body"><div class="fg"><label>اسم الخدمة</label><input type="text" class="fi-db" [(ngModel)]="svcName" placeholder="مثال: غسيل خارجي"></div><div class="fg"><label>وصف الخدمة</label><textarea class="fi-db" [(ngModel)]="svcDesc" rows="2" placeholder="مثال: رغوة عالية + شفط + تجفيف كامل" style="resize:vertical;"></textarea></div>        <div class="fg">
+          <label>السعر (ر.س)</label>
+          <input type="number" class="fi-db" [(ngModel)]="svcPrice" placeholder="مثال: 50" min="0" dir="ltr">
+        </div>
+        <div class="fg">
+          <label>رسوم سيارة كبيرة (ر.س)</label>
+          <input type="number" class="fi-db" [(ngModel)]="svcLargeCarFee" placeholder="مثال: 20" min="0" dir="ltr">
+        </div>
+        <div class="fg" style="display:flex;align-items:center;gap:12px;"><label style="margin:0;white-space:nowrap;">ظاهر للمستخدمين</label><label class="tg"><input type="checkbox" [(ngModel)]="svcVis"><span class="tg-s"></span></label></div></div><div class="mo-foot"><button class="btn bpa bsm" type="button" (click)="saveSvc()"><i class="fas fa-save"></i>حفظ</button><button class="btn bgh bsm" type="button" (click)="clMo('svcMo')">إلغاء</button></div></div></div>
+<div class="mo" id="offMo"><div class="mo-box"><div class="mo-head"><h3 class="mo-title" id="offMoT">إضافة عرض</h3><button class="mo-x" type="button" (click)="clMo('offMo')"><i class="fas fa-times"></i></button></div><div class="mo-body"><div class="fg"><label>صورة العرض</label><div class="fu" (click)="offImgRef.click()"><i class="fas fa-cloud-upload-alt"></i><p>اضغط لرفع صورة</p><img id="offPrev" *ngIf="offPreview" [src]="offPreview" alt="" style="display:block;max-width:100%;max-height:140px;border-radius:8px;margin-top:8px;"></div><input #offImgRef type="file" id="offImg" accept="image/*" style="display:none;" (change)="prevOffImg($any(offImgRef.files))"></div><div class="fg"><label>عنوان العرض</label><input type="text" class="fi-db" [(ngModel)]="offTitle" placeholder="مثال: خصم 30%"></div><div class="fg"><label>نسبة الخصم المئوية (%)</label><input type="number" class="fi-db" [(ngModel)]="offDiscountPct" placeholder="0" min="0" max="100" dir="ltr"></div><div class="fg"><label>وصف العرض</label><textarea class="fi-db" [(ngModel)]="offDesc" rows="2" placeholder="وصف مختصر..." style="resize:vertical;"></textarea></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"><div class="fg"><label>تاريخ البداية</label><input type="date" class="fi-db" [(ngModel)]="offStart" dir="ltr"></div><div class="fg"><label>تاريخ النهاية</label><input type="date" class="fi-db" [(ngModel)]="offEnd" dir="ltr"></div></div></div><div class="mo-foot"><button class="btn bwa bsm" type="button" (click)="saveOff()"><i class="fas fa-save"></i>حفظ</button><button class="btn bgh bsm" type="button" (click)="clMo('offMo')">إلغاء</button></div></div></div>
+<div class="mo" id="addCliMo"><div class="mo-box"><div class="mo-head"><h3 class="mo-title">إضافة عميل جديد</h3><button class="mo-x" type="button" (click)="clMo('addCliMo')"><i class="fas fa-times"></i></button></div><div class="mo-body"><div class="fg"><label>رقم الهاتف</label><input type="tel" class="fi-db" [(ngModel)]="addCliPhone" placeholder="05XXXXXXXX" dir="ltr"></div><p style="font-size:12px;color:var(--db-muted);margin-top:8px;"><i class="fas fa-info-circle"></i> إضافة العميل هنا لا تسجل زيارة، بل تضيفه لقائمة العملاء فقط.</p></div><div class="mo-foot"><button class="btn bpa bsm" type="button" (click)="doAddCliOnly()"><i class="fas fa-save"></i>حفظ</button><button class="btn bgh bsm" type="button" (click)="clMo('addCliMo')">إلغاء</button></div></div></div>
+<div class="mo" id="cliMo"><div class="mo-box"><div class="mo-head"><h3 class="mo-title">تعديل العميل</h3><button class="mo-x" type="button" (click)="clMo('cliMo')"><i class="fas fa-times"></i></button></div><div class="mo-body"><div class="fg"><label>رقم الهاتف</label><input type="tel" class="fi-db" [(ngModel)]="cliPhone" dir="ltr" disabled style="background:#f5f5f5;"></div><div class="fg"><label>نوع الخدمة</label><select class="fi-db" [(ngModel)]="cliService"><option value="oil">تغيير زيت</option><option value="wash">غسيل سيارة</option></select></div></div><div class="mo-foot"><button class="btn bpa bsm" type="button" (click)="updCli()"><i class="fas fa-save"></i>حفظ</button><button class="btn bgh bsm" type="button" (click)="clMo('cliMo')">إلغاء</button></div></div></div>
+<div class="mo" id="delMo"><div class="mo-box" style="max-width:380px;"><div class="mo-head"><h3 class="mo-title">تأكيد الحذف</h3><button class="mo-x" type="button" (click)="clMo('delMo')"><i class="fas fa-times"></i></button></div><div class="mo-body"><p style="color:var(--db-muted);font-size:13px;" id="delMsg">هل أنت متأكد؟</p></div><div class="mo-foot"><button class="btn bda bsm" type="button" (click)="doDel()"><i class="fas fa-trash"></i>حذف</button><button class="btn bgh bsm" type="button" (click)="clMo('delMo')">إلغاء</button></div></div></div>
+
+<div class="mo" id="historyMo" [class.on]="historyModalOpen">
+  <div class="mo-box" style="max-width:800px; width:90%;">
+    <div class="mo-head">
+      <h3 class="mo-title">سجل العميل ({{ selectedCustomerHistoryPhone }})</h3>
+      <button class="mo-x" type="button" (click)="closeCustomerHistory()"><i class="fas fa-times"></i></button>
+    </div>
+    <div style="display:flex; justify-content:space-around; background:#f8fafc; padding:15px; border-bottom:1px solid #e2e8f0; text-align:center;">
+      <div>
+        <div style="font-size:12px; color:#718096; margin-bottom:4px;">إجمالي الزيارات</div>
+        <div style="font-size:18px; font-weight:bold; color:#2d3748;">{{ customerHistory.length }}</div>
+      </div>
+      <div>
+        <div style="font-size:12px; color:#718096; margin-bottom:4px;">إجمالي المصروف</div>
+        <div style="font-size:18px; font-weight:bold; color:#2d3748;">{{ selectedCustomerTotalSpent }} ر.س</div>
+      </div>
+      <div>
+        <div style="font-size:12px; color:#718096; margin-bottom:4px;">إجمالي الخصومات</div>
+        <div style="font-size:18px; font-weight:bold; color:#d9534f;">{{ selectedCustomerTotalDiscounts }} ر.س</div>
+      </div>
+    </div>
+    <div class="mo-body" style="max-height:60vh; overflow-y:auto; padding:0;">
+      <table class="dt" style="margin:0; border:none; box-shadow:none;">
+        <thead>
+          <tr>
+            <th>التاريخ والوقت</th>
+            <th>الخدمة</th>
+            <th>السعر الأصلي</th>
+            <th>نسبة الخصم</th>
+            <th>السعر النهائي</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="!customerHistory.length">
+            <td colspan="5" style="text-align:center; color:var(--db-dim); padding:20px;">لا يوجد سجل لهذا العميل</td>
+          </tr>
+          <tr *ngFor="let t of customerHistory">
+            <td dir="ltr" style="text-align:right;">{{ t.date | date:'short' }}</td>
+            <td>{{ t.service?.name || 'غير معروف' }}</td>
+            <td>{{ t.originalPrice }} ر.س</td>
+            <td><span class="bdg bdg-on" *ngIf="t.discountApplied > 0">{{ t.discountApplied }}%</span><span *ngIf="t.discountApplied === 0">-</span></td>
+            <td>{{ t.finalPrice }} ر.س</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="mo-foot">
+      <button class="btn bgh bsm" type="button" (click)="closeCustomerHistory()">إغلاق</button>
+    </div>
+  </div>
+</div>
+
+<!-- PDF Report Hidden Template -->
+<div *ngIf="reportData" id="pdf-report-content" style="display:none; background:#fff; color:#333; padding:40px; font-family:'Tajawal', 'Segoe UI', Tahoma, sans-serif; direction:rtl;">
+  <!-- Header -->
+  <div style="text-align:center; border-bottom:3px solid #8B1528; padding-bottom:20px; margin-bottom:30px;">
+    <h1 style="color:#8B1528; margin:0; font-size:32px;">يا هلا بك في تقرير مغسلة هيت 🚗✨</h1>
+    <h2 style="color:#666; margin:10px 0 0 0; font-size:20px;">تقرير المبيعات والعمليات - {{ reportPeriodLabel }}</h2>
+  </div>
+
+  <!-- Meta Info -->
+  <div style="display:flex; justify-content:space-between; background:#FDF8F5; padding:15px; border-radius:8px; margin-bottom:30px; font-weight:bold; color:#E86A15;">
+    <div>من تاريخ: <span dir="ltr" style="color:#333;">{{ reportData.fromDate | date:'yyyy-MM-dd' }}</span></div>
+    <div>إلى تاريخ: <span dir="ltr" style="color:#333;">{{ reportData.toDate | date:'yyyy-MM-dd' }}</span></div>
+    <div>تاريخ الإصدار: <span dir="ltr" style="color:#333;">{{ reportData.toDate | date:'yyyy-MM-dd' }}</span></div>
+  </div>
+
+  <!-- Summary Stats -->
+  <h3 style="color:#8B1528; border-bottom:2px dashed #eee; padding-bottom:10px;">الخلاصة والموجز 📊</h3>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:40px;">
+    <div style="background:#f8f9fa; padding:20px; border-radius:10px; text-align:center; box-shadow:0 2px 5px rgba(0,0,0,0.05);">
+      <div style="color:#666; font-size:16px;">عدد السيارات اللي زارتنا</div>
+      <div style="font-size:28px; font-weight:bold; color:#2c3e50;">{{ reportData.totalVisits }}</div>
+    </div>
+    <div style="background:#f8f9fa; padding:20px; border-radius:10px; text-align:center; box-shadow:0 2px 5px rgba(0,0,0,0.05);">
+      <div style="color:#666; font-size:16px;">السيارات اللي استمتعت بالخصم</div>
+      <div style="font-size:28px; font-weight:bold; color:#16a085;">{{ reportData.discountedVisits || 0 }}</div>
+    </div>
+    <div style="background:#f8f9fa; padding:20px; border-radius:10px; text-align:center; box-shadow:0 2px 5px rgba(0,0,0,0.05);">
+      <div style="color:#666; font-size:16px;">الخصومات اللي عطيناها</div>
+      <div style="font-size:28px; font-weight:bold; color:#e74c3c;">{{ reportData.totalDiscounts }} ر.س</div>
+    </div>
+    <div style="background:#FDF8F5; padding:20px; border-radius:10px; text-align:center; box-shadow:0 2px 5px rgba(0,0,0,0.05); border:2px solid #E86A15;">
+      <div style="color:#E86A15; font-size:16px; font-weight:bold;">الصافي اللي دخل الصندوق</div>
+      <div style="font-size:28px; font-weight:bold; color:#8B1528;">{{ reportData.netRevenue }} ر.س</div>
+    </div>
+  </div>
+
+  <!-- Transactions Table -->
+  <h3 style="color:#8B1528; border-bottom:2px dashed #eee; padding-bottom:10px;">تفاصيل الزيارات الأخيرة 🧾</h3>
+  <table style="width:100%; border-collapse:collapse; margin-top:15px;">
+    <thead>
+      <tr style="background:#8B1528; color:#fff;">
+        <th style="padding:12px; text-align:right; border:1px solid #ddd;">التاريخ</th>
+        <th style="padding:12px; text-align:right; border:1px solid #ddd;">جوال العميل</th>
+        <th style="padding:12px; text-align:right; border:1px solid #ddd;">الخدمة</th>
+        <th style="padding:12px; text-align:center; border:1px solid #ddd;">الخصم</th>
+        <th style="padding:12px; text-align:center; border:1px solid #ddd;">الصافي (ر.س)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngIf="!reportData.transactions?.length">
+        <td colspan="5" style="text-align:center; padding:20px; color:#888;">ما فيه أي حركات بهالفترة!</td>
+      </tr>
+      <tr *ngFor="let t of reportData.transactions; let i = index" [style.background]="i % 2 === 0 ? '#fff' : '#f9f9f9'">
+        <td dir="ltr" style="padding:12px; border:1px solid #ddd; text-align:right;">{{ t.date | date:'yyyy-MM-dd HH:mm' }}</td>
+        <td dir="ltr" style="padding:12px; border:1px solid #ddd; text-align:right;">{{ t.customer?.phoneNumber || 'غير معروف' }}</td>
+        <td style="padding:12px; border:1px solid #ddd;">{{ t.service?.name || 'غير معروف' }}</td>
+        <td style="padding:12px; border:1px solid #ddd; text-align:center; color:#e74c3c;">
+          <span *ngIf="t.discountApplied > 0">{{ t.discountApplied }}%</span>
+          <span *ngIf="!t.discountApplied || t.discountApplied === 0">-</span>
+        </td>
+        <td style="padding:12px; border:1px solid #ddd; text-align:center; font-weight:bold;">{{ t.finalPrice }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Footer -->
+  <div style="margin-top:50px; text-align:center; color:#999; font-size:14px; border-top:1px solid #eee; padding-top:20px;">
+    تم إصدار هذا التقرير آلياً من نظام مغسلة هيت للسيارات. 
+    <br> شاكرين ومقدرين لكم جهودكم! 🙏
+  </div>
+</div>
+
+<!-- Loading Overlay for PDF generation -->
+<div *ngIf="isGeneratingReport" style="position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(255,255,255,0.9); z-index:9999; display:flex; flex-direction:column; align-items:center; justify-content:center; direction:rtl;">
+  <i class="fas fa-spinner fa-spin" style="font-size:50px; color:#8B1528; margin-bottom:20px;"></i>
+  <h2 style="color:#333; margin:0;">يا هلا.. جاري تجهيز تقريرك وحفظه كـ PDF 📄✨</h2>
+  <p style="color:#666;">لحظات بسيطة ويكون التقرير جاهز بجهازك...</p>
+</div>

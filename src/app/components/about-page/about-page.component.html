@@ -1,0 +1,586 @@
+<div class="bg-white text-gray-800 overflow-x-hidden font-inter min-h-screen">
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="#" (click)="scrollTo($event, '#home')" class="flex items-center gap-3 group">
+                <div class="w-11 h-11 bg-hit-red rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <span class="text-white font-black text-lg tracking-tighter">H</span>
+                </div>
+                <div class="leading-tight">
+                    <span class="text-lg font-black text-white tracking-tight">HIT</span>
+                    <span class="block text-[8px] text-white/50 font-medium tracking-[0.2em] uppercase">Trading Est.</span>
+                </div>
+            </a>
+
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#" (click)="scrollTo($event, '#home')" class="nav-link text-sm font-medium text-white/80 hover:text-hit-orange transition-colors">الرئيسية</a>
+                <a href="#" (click)="scrollTo($event, '#about')" class="nav-link text-sm font-medium text-white/80 hover:text-hit-orange transition-colors">عن HIT</a>
+                <a href="#" (click)="scrollTo($event, '#services')" class="nav-link text-sm font-medium text-white/80 hover:text-hit-orange transition-colors">خدماتنا</a>
+                <a *ngIf="inviteToken" [href]="'/car_wash/api/share?inviteToken=' + inviteToken" class="nav-link text-sm font-bold text-green-400 hover:text-green-300 transition-colors flex items-center gap-1">
+                    دعوة الأصدقاء
+                    <i data-lucide="users" class="w-4 h-4"></i>
+                </a>
+                <a href="#" (click)="scrollTo($event, '#brands')" class="nav-link text-sm font-medium text-white/80 hover:text-hit-orange transition-colors">شركاؤنا</a>
+                <a href="#" (click)="scrollTo($event, '#location')" class="nav-link text-sm font-medium text-white/80 hover:text-hit-orange transition-colors">الموقع</a>
+            </div>
+
+            <button id="mobileMenuBtn" class="md:hidden text-white p-2" (click)="toggleMobileMenu()">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+
+        <div id="mobileMenu" class="md:hidden bg-hit-deepred/95 backdrop-blur-xl border-t border-white/10" [class.hidden]="!isMobileMenuOpen">
+            <div class="px-6 py-6 flex flex-col gap-4">
+                <a href="#" (click)="scrollTo($event, '#home')" class="text-white/80 hover:text-hit-orange transition-colors py-2 border-b border-white/10">الرئيسية</a>
+                <a href="#" (click)="scrollTo($event, '#about')" class="text-white/80 hover:text-hit-orange transition-colors py-2 border-b border-white/10">عن HIT</a>
+                <a href="#" (click)="scrollTo($event, '#services')" class="text-white/80 hover:text-hit-orange transition-colors py-2 border-b border-white/10">خدماتنا</a>
+                <a *ngIf="inviteToken" [href]="'/car_wash/api/share?inviteToken=' + inviteToken" class="text-green-400 hover:text-green-300 font-bold transition-colors py-2 border-b border-white/10 flex items-center gap-2">
+                    دعوة الأصدقاء
+                    <i data-lucide="users" class="w-4 h-4"></i>
+                </a>
+                <a href="#" (click)="scrollTo($event, '#brands')" class="text-white/80 hover:text-hit-orange transition-colors py-2 border-b border-white/10">شركاؤنا</a>
+                <a href="#" (click)="scrollTo($event, '#location')" class="text-white/80 hover:text-hit-orange transition-colors py-2 border-b border-white/10">الموقع</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ===== HERO ===== -->
+    <section id="home" class="hero-gradient relative min-h-screen flex items-center overflow-hidden">
+        <!-- Geometric Decorations -->
+        <div class="absolute top-20 right-16 opacity-10 hidden lg:block">
+            <div class="grid grid-cols-5 gap-3">
+                <div class="w-8 h-8 bg-white rounded-sm animate-block-pop" style="animation-delay: 0.1s;"></div>
+                <div class="w-8 h-8 bg-hit-orange rounded-sm animate-block-pop" style="animation-delay: 0.2s;"></div>
+                <div class="w-8 h-8 bg-white rounded-sm animate-block-pop" style="animation-delay: 0.3s;"></div>
+                <div class="w-8 h-8 bg-hit-orange rounded-sm animate-block-pop" style="animation-delay: 0.4s;"></div>
+                <div class="w-8 h-8 bg-white rounded-sm animate-block-pop" style="animation-delay: 0.5s;"></div>
+                <div class="w-8 h-8 bg-hit-orange rounded-sm animate-block-pop" style="animation-delay: 0.15s;"></div>
+                <div class="w-8 h-8 bg-white rounded-sm animate-block-pop" style="animation-delay: 0.25s;"></div>
+                <div class="w-8 h-8 bg-white rounded-sm animate-block-pop" style="animation-delay: 0.35s;"></div>
+                <div class="w-8 h-8 bg-hit-orange rounded-sm animate-block-pop" style="animation-delay: 0.45s;"></div>
+                <div class="w-8 h-8 bg-white rounded-sm animate-block-pop" style="animation-delay: 0.55s;"></div>
+                <div class="w-8 h-8 bg-white rounded-sm animate-block-pop" style="animation-delay: 0.2s;"></div>
+                <div class="w-8 h-8 bg-hit-orange rounded-sm animate-block-pop" style="animation-delay: 0.3s;"></div>
+                <div class="w-8 h-8 bg-hit-orange rounded-sm animate-block-pop" style="animation-delay: 0.4s;"></div>
+                <div class="w-8 h-8 bg-white rounded-sm animate-block-pop" style="animation-delay: 0.5s;"></div>
+                <div class="w-8 h-8 bg-hit-orange rounded-sm animate-block-pop" style="animation-delay: 0.6s;"></div>
+            </div>
+        </div>
+
+        <!-- Orange accent lines -->
+        <div class="absolute bottom-0 left-0 right-0 flex gap-1 px-6 pb-0 opacity-20">
+            <div class="flex-1 h-1 bg-hit-orange"></div>
+            <div class="flex-1 h-1 bg-hit-orange"></div>
+            <div class="flex-1 h-1 bg-hit-orange"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-6 pt-32 pb-24 grid lg:grid-cols-2 gap-16 items-center relative z-10 w-full">
+            <!-- Text -->
+            <div class="animate-fade-up">
+                <!-- Geometric orange blocks -->
+                <div class="flex items-center gap-2 mb-6">
+                    <span class="geo-block"></span>
+                    <span class="geo-block" style="width: 20px;"></span>
+                    <span class="geo-block"></span>
+                    <span class="text-hit-orange text-xs font-bold tracking-[0.3em] uppercase mr-2">شرورة</span>
+                </div>
+
+                <h1 class="text-5xl md:text-7xl lg:text-8xl font-black text-white leading-[0.85] tracking-tight mb-6">
+                    {{ settings?.heroTitle || 'HIT' }}
+                </h1>
+
+                <div class="orange-line w-24 mb-6 rounded-full"></div>
+
+                <p class="text-xl md:text-2xl text-white/90 font-light mb-3">
+                    {{ settings?.siteName || 'Hit Trading Est.' }}
+                </p>
+                <p class="text-base text-white/60 leading-relaxed max-w-md mb-8">
+                    {{ settings?.heroDesc || 'مؤسسة هيت للتجارة — خدمات غسيل سيارات وتغيير زيت في شرورة، حي الأمير مشعل، مقابل مسجد بن هجلان' }}
+                </p>
+
+                <div class="flex flex-wrap gap-4">
+                    <a *ngIf="inviteToken" [href]="'/car_wash/api/share?inviteToken=' + inviteToken" 
+                       class="group flex items-center gap-2 bg-gradient-to-r from-[#22C55E] to-[#16A34A] text-white px-7 py-3.5 rounded-[12px] text-sm font-bold shadow-md shadow-green-500/30 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-green-500/50 hover:from-[#16A34A] hover:to-[#15803d] transition-all duration-300">
+                        <i data-lucide="gift" class="w-5 h-5"></i>
+                        ادعُ أصدقاءك
+                    </a>
+                    <a href="#" (click)="scrollTo($event, '#services')" class="group flex items-center gap-2 bg-hit-orange text-white px-7 py-3.5 rounded-lg text-sm font-bold hover:bg-hit-lightorange transition-all duration-300">
+                        اكتشف خدماتنا
+                        <i data-lucide="arrow-left" class="w-4 h-4 group-hover:-translate-x-1 transition-transform"></i>
+                    </a>
+                    <a href="#" (click)="scrollTo($event, '#location')" class="flex items-center gap-2 border border-white/20 text-white px-7 py-3.5 rounded-lg text-sm font-medium hover:border-hit-orange hover:text-hit-orange transition-all duration-300">
+                        <i data-lucide="map-pin" class="w-4 h-4"></i>
+                        موقعنا
+                    </a>
+                </div>
+            </div>
+
+            <!-- Logo Display -->
+            <div class="flex justify-center animate-fade-in" style="animation-delay: 0.4s;">
+                <div class="relative">
+                    <!-- Background shape -->
+                    <div class="absolute inset-0 bg-hit-orange/10 rounded-3xl rotate-6 scale-105"></div>
+                    <div class="relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-10 flex flex-col items-center">
+                        <img src="https://z-cdn-media.chatglm.cn/files/701066bd-7e16-43ad-b8f4-48fa3e3ac64c.jpeg?auth_key=1882485128-87f3547d31af43d58ecf33d6874baf4a-0-2293eb2860e50d8beaa3c557eb8da082" 
+                             alt="HIT Logo" 
+                             class="w-72 h-72 object-contain rounded-2xl">
+                        <div class="flex items-center gap-2 mt-6">
+                            <span class="w-3 h-3 bg-hit-orange rounded-sm"></span>
+                            <span class="w-3 h-3 bg-white/30 rounded-sm"></span>
+                            <span class="w-3 h-3 bg-hit-orange rounded-sm"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
+            <i data-lucide="chevron-down" class="w-5 h-5 text-white/30"></i>
+        </div>
+    </section>
+
+    <!-- ===== ABOUT ===== -->
+    <section id="about" class="relative py-24 bg-white overflow-hidden">
+        <div class="absolute inset-0 grid-dots"></div>
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <!-- Image Side -->
+                <div class="relative reveal-element">
+                    <div class="rounded-2xl overflow-hidden shadow-2xl">
+                        <img [src]="settings?.aboutImage || 'https://picsum.photos/seed/hit-about-sharurah/650/500.jpg'" 
+                             alt="مغسلة HIT في شرورة" 
+                             class="w-full h-[420px] object-cover">
+                    </div>
+                    <!-- Floating badge -->
+                    <div class="absolute -bottom-5 -left-5 bg-hit-red text-white rounded-xl px-6 py-4 shadow-xl animate-float">
+                        <div class="text-2xl font-black">HIT</div>
+                        <div class="text-[10px] text-white/60 tracking-widest uppercase">Since Day 1</div>
+                    </div>
+                    <!-- Orange corner accent -->
+                    <div class="absolute -top-3 -right-3 w-16 h-16 border-t-4 border-r-4 border-hit-orange rounded-tr-2xl"></div>
+                </div>
+
+                <!-- Text Side -->
+                <div class="reveal-element">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="geo-block"></span>
+                        <span class="text-hit-orange text-xs font-bold tracking-[0.2em] uppercase">من نحن</span>
+                    </div>
+
+                    <h2 class="text-3xl md:text-4xl font-black text-hit-darkred tracking-tight mb-6 leading-tight red-accent">
+                        {{ settings?.aboutTitle || 'عن مؤسسة هيت للتجارة' }}
+                    </h2>
+
+                    <div class="w-16 h-0.5 bg-hit-orange mb-8 rounded-full"></div>
+
+                    <p class="text-gray-600 text-base leading-[1.9] mb-6">
+                        {{ settings?.aboutText1 || 'مؤسسة هيت للتجارة موجودة في قلب شرورة — حي الأمير مشعل، مقابل مسجد بن هجلان. نقدم خدمات غسيل السيارات وتغيير الزيت بأعلى معايير الجودة، ونحرص إن كل زبون يطلع راضي عن الخدمة والنظافة.' }}
+                    </p>
+                    <p class="text-gray-600 text-base leading-[1.9] mb-8">
+                        {{ settings?.aboutText2 || 'نستخدم مواد نظافة عالمية وزيوت أصلية من أقوى الماركات مثل PETROMIN، والفنيين عندنا ذوي خبرة في التعامل مع جميع أنواع السيارات.' }}
+                    </p>
+
+                    <!-- Values -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="flex items-center gap-3 bg-hit-cream rounded-xl p-4">
+                            <div class="w-10 h-10 bg-hit-red/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="shield-check" class="w-5 h-5 text-hit-red"></i>
+                            </div>
+                            <span class="text-sm font-semibold text-hit-darkred">جودة مضمونة</span>
+                        </div>
+                        <div class="flex items-center gap-3 bg-hit-cream rounded-xl p-4">
+                            <div class="w-10 h-10 bg-hit-red/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="timer" class="w-5 h-5 text-hit-red"></i>
+                            </div>
+                            <span class="text-sm font-semibold text-hit-darkred">خدمة سريعة</span>
+                        </div>
+                        <div class="flex items-center gap-3 bg-hit-cream rounded-xl p-4">
+                            <div class="w-10 h-10 bg-hit-red/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="sparkles" class="w-5 h-5 text-hit-red"></i>
+                            </div>
+                            <span class="text-sm font-semibold text-hit-darkred">نظافة فائقة</span>
+                        </div>
+                        <div class="flex items-center gap-3 bg-hit-cream rounded-xl p-4">
+                            <div class="w-10 h-10 bg-hit-red/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="heart-handshake" class="w-5 h-5 text-hit-red"></i>
+                            </div>
+                            <span class="text-sm font-semibold text-hit-darkred">أسعار منافسة</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== OFFERS ===== -->
+    <section id="offers" class="relative py-24 bg-white overflow-hidden" *ngIf="offers && offers.length > 0">
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <!-- Header -->
+            <div class="text-center mb-16 reveal-element">
+                <div class="flex items-center justify-center gap-2 mb-4">
+                    <span class="geo-block"></span>
+                    <span class="geo-block" style="width: 20px;"></span>
+                    <span class="geo-block"></span>
+                    <span class="text-hit-orange text-xs font-bold tracking-[0.2em] uppercase mr-2">العروض</span>
+                    <span class="geo-block"></span>
+                    <span class="geo-block" style="width: 20px;"></span>
+                    <span class="geo-block"></span>
+                </div>
+                <h2 class="text-3xl md:text-4xl font-black text-hit-darkred tracking-tight mb-4">
+                    أقوى العروض
+                </h2>
+                <p class="text-gray-500 text-base max-w-xl mx-auto">
+                    لا تفوت عروضنا المميزة واستفد من الخصومات
+                </p>
+            </div>
+
+            <!-- Offers Grid -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="service-card bg-white rounded-2xl border border-gray-100 overflow-hidden reveal-element shadow-sm hover:shadow-md transition-shadow" *ngFor="let offer of offers">
+                    <div class="relative h-48 w-full bg-hit-cream">
+                        <img *ngIf="offer.image" [src]="offer.image" [alt]="offer.title" class="w-full h-full object-cover">
+                        <div *ngIf="offer.discountPct" class="absolute top-4 right-4 bg-hit-red text-white text-sm font-bold px-3 py-1 rounded-full shadow-md">
+                            خصم {{ offer.discountPct }}%
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-hit-darkred mb-2">{{ offer.title }}</h3>
+                        <p class="text-gray-500 text-sm leading-relaxed mb-4" style="min-height: 40px;">{{ offer.desc }}</p>
+                        <div class="flex justify-between items-center text-xs text-gray-400 border-t border-gray-50 pt-4">
+                            <span>تبدأ: {{ offer.startDate | date:'yyyy-MM-dd' }}</span>
+                            <span>تنتهي: {{ offer.endDate | date:'yyyy-MM-dd' }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SERVICES ===== -->
+    <section id="services" class="relative py-24 bg-hit-cream overflow-hidden">
+        <div class="absolute inset-0 diagonal-lines"></div>
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <!-- Header -->
+            <div class="text-center mb-16 reveal-element">
+                <div class="flex items-center justify-center gap-2 mb-4">
+                    <span class="geo-block"></span>
+                    <span class="geo-block" style="width: 20px;"></span>
+                    <span class="geo-block"></span>
+                    <span class="text-hit-orange text-xs font-bold tracking-[0.2em] uppercase mr-2">الخدمات</span>
+                    <span class="geo-block"></span>
+                    <span class="geo-block" style="width: 20px;"></span>
+                    <span class="geo-block"></span>
+                </div>
+                <h2 class="text-3xl md:text-4xl font-black text-hit-darkred tracking-tight mb-4">
+                    وش نقدم لكم؟
+                </h2>
+                <p class="text-gray-500 text-base max-w-xl mx-auto">
+                    خدمات متكاملة لسيارتك تحت سقف واحد، كلها بعناية واهتمام
+                </p>
+            </div>
+
+            <!-- Services Grid -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Service 1 -->
+                <div class="service-card bg-white rounded-2xl p-8 border border-gray-100 reveal-element">
+                    <div class="icon-wrap w-14 h-14 bg-hit-cream rounded-xl flex items-center justify-center mb-5">
+                        <i data-lucide="droplets" class="w-6 h-6 text-hit-red"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-hit-darkred mb-2">غسيل خارجي</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">غسيل شامل للسيارة من برا بالرغوة والماء النظيف، مع تجفيف كامل يخليها تلمع</p>
+                </div>
+
+                <!-- Service 2 -->
+                <div class="service-card bg-white rounded-2xl p-8 border border-gray-100 reveal-element">
+                    <div class="icon-wrap w-14 h-14 bg-hit-cream rounded-xl flex items-center justify-center mb-5">
+                        <i data-lucide="armchair" class="w-6 h-6 text-hit-red"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-hit-darkred mb-2">تنظيف داخلي</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">كنش وسحب غبار وتنظيف مقاعد وبلور، السيارة من جوا تطلع نظيفة ومرتبة</p>
+                </div>
+
+                <!-- Service 3 -->
+                <div class="service-card bg-white rounded-2xl p-8 border border-gray-100 reveal-element relative overflow-hidden">
+                    <div class="absolute top-4 left-4 bg-hit-orange text-white text-[10px] font-bold px-3 py-1 rounded-full">مميز</div>
+                    <div class="icon-wrap w-14 h-14 bg-hit-cream rounded-xl flex items-center justify-center mb-5">
+                        <i data-lucide="oil" class="w-6 h-6 text-hit-red"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-hit-darkred mb-2">تغيير زيت</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">زيوت أصلية من PETROMIN وغيرها، مع فلتر زيت وفحص مجاني لمستويات السيارة</p>
+                </div>
+
+                <!-- Service 4 -->
+                <div class="service-card bg-white rounded-2xl p-8 border border-gray-100 reveal-element">
+                    <div class="icon-wrap w-14 h-14 bg-hit-cream rounded-xl flex items-center justify-center mb-5">
+                        <i data-lucide="sun" class="w-6 h-6 text-hit-red"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-hit-darkred mb-2">تلميع وواكس</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">تلميع الجسم بالواكس الحماية، يحافظ على الطلع ويمنع تأثير الشمس</p>
+                </div>
+
+                <!-- Service 5 -->
+                <div class="service-card bg-white rounded-2xl p-8 border border-gray-100 reveal-element">
+                    <div class="icon-wrap w-14 h-14 bg-hit-cream rounded-xl flex items-center justify-center mb-5">
+                        <i data-lucide="wind" class="w-6 h-6 text-hit-red"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-hit-darkred mb-2">تنظيف مكيفات</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">تنظيف فلاتر المكيف وتعقيمها، الريحة تطلع نظيفة ومعطرة طول الوقت</p>
+                </div>
+
+                <!-- Service 6 -->
+                <div class="service-card bg-white rounded-2xl p-8 border border-gray-100 reveal-element">
+                    <div class="icon-wrap w-14 h-14 bg-hit-cream rounded-xl flex items-center justify-center mb-5">
+                        <i data-lucide="paintbrush" class="w-6 h-6 text-hit-red"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-hit-darkred mb-2">سيراميك وحماية</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">طبقة سيراميك أو فيلم حماية للطلع، يحافظ على شكل السيارة لفترة طويلة</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== BRANDS / PETROMIN ===== -->
+    <section id="brands" class="relative py-24 bg-hit-dark overflow-hidden">
+        <div class="absolute inset-0 grid-dots opacity-30"></div>
+        <!-- Decorative blocks -->
+        <div class="absolute top-10 left-10 w-6 h-6 bg-hit-orange/20 rounded-sm"></div>
+        <div class="absolute top-10 left-20 w-6 h-6 bg-white/5 rounded-sm"></div>
+        <div class="absolute bottom-10 right-10 w-6 h-6 bg-white/5 rounded-sm"></div>
+        <div class="absolute bottom-10 right-20 w-6 h-6 bg-hit-orange/20 rounded-sm"></div>
+
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <!-- Text -->
+                <div class="reveal-element">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="geo-block"></span>
+                        <span class="text-hit-orange text-xs font-bold tracking-[0.2em] uppercase">شركاؤنا</span>
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-black text-white tracking-tight mb-6 leading-tight">
+                        نتعامل مع <span class="text-hit-orange">أفضل الماركات</span>
+                    </h2>
+                    <div class="w-16 h-0.5 bg-hit-orange mb-8 rounded-full"></div>
+                    <p class="text-white/60 text-base leading-[1.9] mb-8">
+                        ما نستخدم إلا منتجات أصلية ومعتمدة. من زيوت PETROMIN السعودية الأصلية 
+                        إلى مواد التنظيف والتلميع العالمية، كل شيء عندنا مضمون وأصلي 100%.
+                    </p>
+
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-2 h-2 bg-hit-orange rounded-full"></div>
+                            <span class="text-white/80 text-sm">زيوت PETROMIN أصلية بجميع أنواعها</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-2 h-2 bg-hit-orange rounded-full"></div>
+                            <span class="text-white/80 text-sm">مواد تنظيف وتلميع عالمية</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-2 h-2 bg-hit-orange rounded-full"></div>
+                            <span class="text-white/80 text-sm">فلاتر أصلية لجميع السيارات</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-2 h-2 bg-hit-orange rounded-full"></div>
+                            <span class="text-white/80 text-sm">منتجات حماية سيراميك معتمدة</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Brand Images -->
+                <div class="flex flex-col items-center gap-8 reveal-element">
+                    <ng-container *ngIf="settings?.brands && settings!.brands.length > 0; else defaultBrands">
+                        <div *ngFor="let brand of settings!.brands; let i = index" [ngClass]="i % 2 === 0 ? 'bg-white' : 'bg-white/5 border border-white/10'" class="rounded-2xl p-8 shadow-xl w-full max-w-sm flex items-center justify-center">
+                            <img [src]="brand" alt="Partner Logo" class="h-24 object-contain">
+                        </div>
+                    </ng-container>
+                    <ng-template #defaultBrands>
+                        <div class="bg-white rounded-2xl p-8 shadow-xl w-full max-w-sm flex items-center justify-center">
+                            <img src="https://z-cdn-media.chatglm.cn/files/036c73f8-1252-40c6-b6aa-15c956034de3.jpeg?auth_key=1882485128-46af0824f6664c228599d3cced7de8d4-0-435ad649630cbaa1672d6b73596a5142" 
+                                 alt="PETROMIN" class="h-28 object-contain">
+                        </div>
+                        <div class="bg-white/5 border border-white/10 rounded-2xl p-8 w-full max-w-sm flex items-center justify-center">
+                            <img src="https://z-cdn-media.chatglm.cn/files/df2a5e96-fd21-40a1-a0f5-bc3e3f4fd7dc.jpeg?auth_key=1882485128-0aefc048df3e40378dfe3fc1152fea46-0-0b39197b90b6e643062ecdb2e75f5215" 
+                                 alt="HIT Brand" class="h-24 object-contain">
+                        </div>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== LOCATION ===== -->
+    <section id="location" class="relative py-24 bg-white overflow-hidden">
+        <div class="absolute inset-0 grid-dots"></div>
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <!-- Header -->
+            <div class="text-center mb-16 reveal-element">
+                <div class="flex items-center justify-center gap-2 mb-4">
+                    <span class="geo-block"></span>
+                    <span class="geo-block" style="width: 20px;"></span>
+                    <span class="geo-block"></span>
+                    <span class="text-hit-orange text-xs font-bold tracking-[0.2em] uppercase mr-2">الموقع</span>
+                    <span class="geo-block"></span>
+                    <span class="geo-block" style="width: 20px;"></span>
+                    <span class="geo-block"></span>
+                </div>
+                <h2 class="text-3xl md:text-4xl font-black text-hit-darkred tracking-tight mb-4">
+                    وين نلقاك؟
+                </h2>
+                <p class="text-gray-500 text-base max-w-xl mx-auto">
+                    موقعنا سهل الوصول إليه في قلب شرورة
+                </p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <!-- Map Placeholder -->
+                <div class="reveal-element">
+                    <div class="bg-hit-cream rounded-2xl overflow-hidden border border-gray-100 relative h-[400px]">
+                        <iframe 
+                            *ngIf="safeMapUrl; else defaultMap"
+                            [src]="safeMapUrl" 
+                            width="100%" 
+                            height="100%" 
+                            style="border:0;" 
+                            allowfullscreen="" 
+                            loading="lazy" 
+                            referrerpolicy="no-referrer-when-downgrade"
+                            class="grayscale hover:grayscale-0 transition-all duration-700">
+                        </iframe>
+                        <ng-template #defaultMap>
+                            <iframe 
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.5!2d47.1!3d17.5!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTfCsDMwJzAwLjAiTiA0N8KwMDYnMDAuMCJF!5e0!3m2!1sar!2ssa!4v1700000000000!5m2!1sar!2ssa" 
+                                width="100%" 
+                                height="100%" 
+                                style="border:0;" 
+                                allowfullscreen="" 
+                                loading="lazy" 
+                                referrerpolicy="no-referrer-when-downgrade"
+                                class="grayscale hover:grayscale-0 transition-all duration-700">
+                            </iframe>
+                        </ng-template>
+                    </div>
+                </div>
+
+                <!-- Location Details -->
+                <div class="reveal-element">
+                    <div class="bg-hit-cream rounded-2xl p-8 border border-gray-100">
+                        <div class="flex items-start gap-4 mb-8">
+                            <div class="w-12 h-12 bg-hit-red rounded-xl flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="map-pin" class="w-6 h-6 text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-hit-darkred mb-1">العنوان</h3>
+                                <p class="text-gray-600 text-sm leading-relaxed">
+                                    شرورة — حي الأمير مشعل<br>
+                                    مقابل مسجد بن هجلان
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4 mb-8">
+                            <div class="w-12 h-12 bg-hit-red rounded-xl flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="clock" class="w-6 h-6 text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-hit-darkred mb-1">ساعات العمل</h3>
+                                <p class="text-gray-600 text-sm">
+                                    السبت - الخميس: من الصبح لليل<br>
+                                    <span class="text-gray-400 text-xs">الجمعة: من بعد العصر لليل</span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4 mb-8">
+                            <div class="w-12 h-12 bg-hit-red rounded-xl flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="phone" class="w-6 h-6 text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-hit-darkred mb-1">تواصل</h3>
+                                <p class="text-gray-600 text-sm" dir="ltr">اتصل على رقم الجوال</p>
+                            </div>
+                        </div>
+
+                        <!-- Direction hint -->
+                        <div class="bg-white rounded-xl p-4 border border-gray-100">
+                            <div class="flex items-center gap-3">
+                                <i data-lucide="navigation" class="w-5 h-5 text-hit-orange"></i>
+                                <p class="text-sm text-gray-600">
+                                    <span class="font-semibold text-hit-darkred">علامة مميزة:</span> 
+                                    روح لحي الأمير مشعل وابحث عن مسجد بن هجلان، نحن مقابلهم مباشرة
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SIMPLE CTA BAND ===== -->
+    <section class="hero-gradient py-16 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-4 right-[10%] w-4 h-4 bg-hit-orange rounded-sm"></div>
+            <div class="absolute top-4 right-[15%] w-4 h-4 bg-white rounded-sm"></div>
+            <div class="absolute bottom-4 left-[10%] w-4 h-4 bg-white rounded-sm"></div>
+            <div class="absolute bottom-4 left-[15%] w-4 h-4 bg-hit-orange rounded-sm"></div>
+        </div>
+        <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
+            <h2 class="text-3xl md:text-4xl font-black text-white tracking-tight mb-4">
+                سيارتك تستاهل الأفضل
+            </h2>
+            <p class="text-white/60 text-base mb-8 max-w-lg mx-auto">
+                مرنا في أي وقت ونحن جاهزين نخدمك في شرورة — حي الأمير مشعل
+            </p>
+            <div class="flex items-center justify-center gap-3">
+                <span class="w-3 h-3 bg-hit-orange rounded-sm"></span>
+                <span class="w-3 h-3 bg-white/30 rounded-sm"></span>
+                <span class="w-3 h-3 bg-hit-orange rounded-sm"></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="bg-hit-dark py-12">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+                <!-- Logo -->
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-hit-red rounded-lg flex items-center justify-center">
+                        <span class="text-white font-black text-lg">H</span>
+                    </div>
+                    <div class="leading-tight">
+                        <span class="text-lg font-black text-white tracking-tight">HIT</span>
+                        <span class="block text-[8px] text-white/40 font-medium tracking-[0.15em] uppercase">Trading Est.</span>
+                    </div>
+                </div>
+
+                <!-- Location -->
+                <div class="text-center">
+                    <p class="text-white/50 text-sm">شرورة — حي الأمير مشعل — مقابل مسجد بن هجلان</p>
+                </div>
+
+                <!-- Geometric accent -->
+                <div class="flex items-center gap-1.5">
+                    <span class="w-3 h-3 bg-hit-red rounded-sm"></span>
+                    <span class="w-3 h-3 bg-hit-orange rounded-sm"></span>
+                    <span class="w-3 h-3 bg-white/10 rounded-sm"></span>
+                    <span class="w-3 h-3 bg-hit-orange rounded-sm"></span>
+                    <span class="w-3 h-3 bg-hit-red rounded-sm"></span>
+                </div>
+            </div>
+
+            <div class="border-t border-white/5 mt-8 pt-8 text-center">
+                <p class="text-white/20 text-xs">
+                    © 2025 مؤسسة هيت للتجارة — Hit Trading Est. — جميع الحقوق محفوظة
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Float -->
+    <a href="https://wa.me/966500000000" target="_blank" 
+       class="fixed bottom-6 right-6 z-50 w-14 h-14 bg-green-500 rounded-full flex items-center justify-center shadow-lg shadow-green-500/30 hover:bg-green-600 hover:scale-110 transition-all duration-300">
+        <svg class="w-7 h-7 text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </a>
+</div>

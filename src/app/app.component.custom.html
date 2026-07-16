@@ -1,0 +1,33 @@
+<div class="app-shell">
+  <header class="topbar" *ngIf="showShellHeader()">
+    <div class="brand">
+      <div class="brand-icon"><i class="fas fa-car-side"></i></div>
+      <div>
+        <h2>مغسلة هيت</h2>
+        <p>نظام إدارة الدعوات والخدمات</p>
+      </div>
+    </div>
+    <nav class="nav-links">
+      <button (click)="goTo('share')" [class.active]="currentView === 'share'"><i class="fas fa-share-alt" style="margin-left: 6px;"></i> دعوة الأصدقاء</button>
+      <button (click)="goTo('about')" [class.active]="currentView === 'about'"><i class="fas fa-info-circle" style="margin-left: 6px;"></i> عن المغسلة</button>
+      <button (click)="goTo('owner')" [class.active]="isOwnerView()" *ngIf="role === 'admin'"><i class="fas fa-chart-line" style="margin-left: 6px;"></i> لوحة التحكم</button>
+      <button (click)="logout()" class="logout-btn" *ngIf="token && role === 'admin'"><i class="fas fa-sign-out-alt" style="margin-left: 6px;"></i> تسجيل الخروج</button>
+    </nav>
+  </header>
+
+  <main class="content" *ngIf="currentView === 'login'">
+    <app-admin-login (loginRequested)="handleLoginSuccess($event)"></app-admin-login>
+  </main>
+
+  <main class="content owner-content" *ngIf="isOwnerView()">
+    <app-admin-workspace [token]="token" [role]="role" (logoutRequested)="logout()"></app-admin-workspace>
+  </main>
+
+  <main class="content" *ngIf="currentView === 'share'">
+    <app-invite-page></app-invite-page>
+  </main>
+
+  <main class="content" *ngIf="currentView === 'about'">
+    <app-about-page></app-about-page>
+  </main>
+</div>

@@ -1,0 +1,81 @@
+<section class="invite-shell">
+  <div class="invite-hero">
+    <div class="hero-copy">
+      <span class="pill">دعوة الأصدقاء</span>
+      <h2>ادعُ أصدقاءك واحصل على خصم 20% لكل صديق</h2>
+      <p>أو غسلة مجانية بعد 5 دعوات</p>
+    </div>
+    <img src="https://z-cdn-media.chatglm.cn/files/0646e91e-2aeb-476e-b5a0-fd956a43a963.jpeg?auth_key=1882721456-002f0733f77c466884141c24f970d7b8-0-5a0401cbd8892c70224e0125f317468d" alt="مغسلة هيت" class="hero-logo" />
+  </div>
+
+  <div class="invite-card">
+    <div class="section-head">
+      <h2>إرسال الدعوات</h2>
+    </div>
+
+    <div *ngIf="completed && !errorMessage" class="completed-state">
+      <h2>🎉 مبروك!</h2>
+      <p>لقد قمت بالفعل بدعوة جميع أصدقائك (5/5).</p>
+      <p class="success-note">✅ تم استلام مكافأتك بنجاح.</p>
+      <button class="submit mt-4" onclick="window.location.href='/car_wash/api/about'" style="margin-top:20px;">العودة للرئيسية</button>
+    </div>
+
+    <div *ngIf="errorMessage" class="error-state text-center" style="padding: 20px;">
+      <h2 style="color: #ef4444; margin-bottom: 15px;"><i class="fas fa-exclamation-circle"></i> تنبيه</h2>
+      <p style="color: #ef4444; font-weight: bold;">{{ errorMessage }}</p>
+      <button class="submit mt-4" onclick="window.location.href='/car_wash/api/about'" style="margin-top:20px;">العودة للرئيسية</button>
+    </div>
+
+    <div *ngIf="!completed && !errorMessage">
+      <!-- Progress Bar -->
+      <div class="progress-container">
+        <div class="progress-header">
+          <span>تقدم الدعوات:</span>
+          <span style="color: #8B1024;">{{ invitationCount }} / 5</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" [style.width]="(invitationCount / 5) * 100 + '%'"></div>
+        </div>
+      </div>
+
+      <div class="invite-form">
+        <label>رقم الداعي (رقمك):</label>
+        <input type="tel" [value]="maskedPhone" placeholder="جاري جلب رقم الهاتف..." dir="ltr" style="text-align:right" readonly />
+      </div>
+
+      <div class="invite-form" style="margin-top:24px;">
+        <label>أرقام أصدقائك:</label>
+        
+        <!-- Render exactly 5 slots -->
+        <div class="friend-slot" *ngFor="let friend of [0, 1, 2, 3, 4]; let i = index">
+          <div class="friend-label">صديق {{ i + 1 }}</div>
+          <div class="friend-input-wrapper">
+            <!-- If this slot is already completed from previous invitations -->
+            <input *ngIf="i < invitationCount" type="tel" value="تمت الدعوة ✓" dir="ltr" style="text-align:right; color: #16A34A; font-weight: bold;" readonly />
+            
+            <!-- If this slot is available to be filled now -->
+            <input *ngIf="i >= invitationCount" type="tel" [(ngModel)]="friends[i]" placeholder="رقم الهاتف" dir="ltr" style="text-align:right;" />
+          </div>
+          <div class="status-icon" [ngClass]="i < invitationCount ? 'completed' : 'pending'">
+            <i class="fas" [ngClass]="i < invitationCount ? 'fa-check-circle' : 'fa-circle' " [style.opacity]="i < invitationCount ? '1' : '0.2'"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="consent-box">
+        <input type="checkbox" id="legalConsent" [(ngModel)]="legalConsent">
+        <label for="legalConsent">
+          أؤكد أن هذه أرقام أصدقائي وأنهم موافقون على استلام الدعوة، وأتحمل المسؤولية في حال حظر رقم المغسلة
+        </label>
+      </div>
+
+      <p class="error" *ngIf="errorMessage"><i class="fas fa-exclamation-circle" style="margin-left: 8px;"></i>{{ errorMessage }}</p>
+      <p class="success" *ngIf="successMessage"><i class="fas fa-check-circle" style="margin-left: 8px;"></i>{{ successMessage }}</p>
+
+      <button class="submit" (click)="sendInvitation()" [disabled]="isBusy || !legalConsent || !inviterPhone" style="margin-top:24px;">
+        <span *ngIf="!isBusy">إرسال الدعوات الان</span>
+        <span *ngIf="isBusy"><i class="fas fa-spinner fa-spin" style="margin-left: 8px;"></i>جاري الإرسال...</span>
+      </button>
+    </div>
+  </div>
+</section>
