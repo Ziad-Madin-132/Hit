@@ -3,7 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError, of } from 'rxjs';
 import { catchError, map, timeout } from 'rxjs/operators';
 
-const API_BASE = 'https://hitbackend-ynvx0kpn.b4a.run/api';
+const API_BASE = 'https://hitbackend-cb9xbv8b.b4a.run/api';
 
 export interface SendMessageResponse {
   success: boolean;
