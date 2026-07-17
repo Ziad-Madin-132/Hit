@@ -74,7 +74,7 @@ export interface NotificationLog {
   providedIn: 'root'
 })
 export class ApiService {
-  private baseUrl = 'https://hitbackend-cb9xbv8b.b4a.run/api';
+  private baseUrl = 'https://hitbackend-ohhswihg.b4a.run/api';
   private httpOptions = { withCredentials: true };
 
   constructor(private http: HttpClient) {}
